@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.albumapplication.domain.utils.Constants
+import com.example.albumapplication.R
 import com.example.albumapplication.adapter.RecyclerViewAdapter
 import com.example.albumapplication.databinding.ActivityMainBinding
 import com.example.albumapplication.di.DaggerAppComponent
@@ -28,6 +29,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setVisibilities(View.INVISIBLE, View.INVISIBLE,View.VISIBLE)
+
         //Layout manager
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -35,10 +38,16 @@ class MainActivity : AppCompatActivity() {
             it?.let {
                 mAdapter = RecyclerViewAdapter(it)
                 binding.recyclerView.adapter = mAdapter
-                setVisibilities(View.INVISIBLE, View.VISIBLE)
+                setVisibilities(View.INVISIBLE, View.VISIBLE, View.INVISIBLE)
             }?: run{
-                setVisibilities(View.VISIBLE, View.INVISIBLE)
+                binding.errorTextView.text = getString(R.string.no_items)
+                setVisibilities(View.VISIBLE, View.INVISIBLE, View.INVISIBLE)
             }
+        })
+
+        viewModel.errorMessage.observe(this,{
+            binding.errorTextView.text = getString(R.string.error)
+            setVisibilities(View.VISIBLE, View.INVISIBLE, View.INVISIBLE)
         })
 
         viewModel.getAllAlbums()
@@ -47,8 +56,9 @@ class MainActivity : AppCompatActivity() {
     /**
      * set view's visibility
      */
-    fun setVisibilities(textVisibility: Int, recyclerVisibility: Int){
+    fun setVisibilities(textVisibility: Int, recyclerVisibility: Int, progressVisibility: Int){
         binding.recyclerView.visibility = recyclerVisibility
-        binding.textView.visibility = textVisibility
+        binding.errorTextView.visibility = textVisibility
+        binding.searchProgressBar.visibility = progressVisibility
     }
 }
