@@ -4,14 +4,13 @@ import android.content.IntentFilter
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.albumapplication.domain.models.Album
 import com.albumapplication.domain.utils.ConnectivityReceiver
-import com.albumapplication.domain.utils.Constants
 import com.example.albumapplication.R
+import com.example.albumapplication.interfaces.ItemClickListener
 import com.example.albumapplication.adapter.RecyclerViewAdapter
 import com.example.albumapplication.databinding.ActivityMainBinding
 import com.example.albumapplication.di.DaggerAppComponent
@@ -20,7 +19,8 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityReceiverListener {
+class MainActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityReceiverListener,
+    ItemClickListener {
 
     private lateinit var binding: ActivityMainBinding
     @Inject
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRecei
 
         viewModel.albumList.observe(this,{
             it?.let {
-                mAdapter = RecyclerViewAdapter(it)
+                mAdapter = RecyclerViewAdapter(it, this)
                 binding.recyclerView.adapter = mAdapter
                 setVisibilities(View.INVISIBLE, View.VISIBLE, View.INVISIBLE)
             }?: run{
@@ -90,5 +90,12 @@ class MainActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRecei
         } else {
             snackBar?.dismiss()
         }
+    }
+
+    override fun onItemClickListener(album: Album) {
+        DetailBottomSheetFragment.newInstance(album).show(
+            supportFragmentManager,
+            "DetailBottomSheetFragment"
+        )
     }
 }
