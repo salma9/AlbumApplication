@@ -1,0 +1,5 @@
+<resources>
+    <dimen name="middle_margin">10dp</dimen>
+    <dimen name="small_margin">5dp</dimen>
+    <dimen name="corner_radius">8dp</dimen>
+</resources>
