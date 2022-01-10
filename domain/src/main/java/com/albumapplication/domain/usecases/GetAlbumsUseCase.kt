@@ -5,5 +5,5 @@ import javax.inject.Inject
 
 class GetAlbumsUseCase @Inject constructor(private val albumRepository: AlbumRepository) {
 
-    suspend operator fun invoke() = albumRepository.getAlbumList()
+    suspend operator fun invoke() = albumRepository.getRemoteAlbumList()
 }
