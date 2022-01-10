@@ -16,6 +16,11 @@
             android:name=".view.MainActivity"
             android:configChanges="orientation|screenSize"
             android:exported="true">
+        </activity>
+        <activity
+            android:name=".view.SplashScreenActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AlbumApplication.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
